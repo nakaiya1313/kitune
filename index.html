@@ -800,10 +800,11 @@ function mBass(type,f,t,beat,vol){ if(!f)return; const o=actx.createOscillator()
   o.type=type; o.frequency.value=f; flt.type='lowpass'; flt.frequency.value=900; const dur=beat*0.9;
   g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
   o.connect(flt);flt.connect(g);g.connect(musicBus); o.start(t); o.stop(t+dur+0.02); }
-function mPad(name,t,dur,vol){ const c=chordTones(name); const flt=actx.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=1500;
+function mPad(name,t,dur,vol){ const c=chordTones(name); const flt=actx.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=2400;
   const g=actx.createGain(); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.25); g.gain.setValueAtTime(vol,t+dur-0.2); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
   flt.connect(g); g.connect(musicBus);
-  for(let i=0;i<3;i++){ const o=actx.createOscillator(); o.type='sawtooth'; o.frequency.value=440*Math.pow(2,(c.root+c.ints[i%c.ints.length]+12*4-69)/12); o.detune.value=(i-1)*7; o.connect(flt); o.start(t); o.stop(t+dur+0.05); } }
+  /* triangle・1オクターブ上：唸る低音ドローンにならない薄い和音層 */
+  for(let i=0;i<3;i++){ const o=actx.createOscillator(); o.type='triangle'; o.frequency.value=440*Math.pow(2,(c.root+c.ints[i%c.ints.length]+12*5-69)/12); o.detune.value=(i-1)*6; o.connect(flt); o.start(t); o.stop(t+dur+0.05); } }
 function mArp(type,f,t,beat,vol){ if(!f)return; const o=actx.createOscillator(),g=actx.createGain(); o.type=type; o.frequency.value=f;
   const dur=Math.max(0.05,beat*0.6); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.006); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
   o.connect(g);g.connect(musicBus);o.start(t);o.stop(t+dur+0.02); }
@@ -825,7 +826,7 @@ const Music=(function(){
     while(nextTime < actx.currentTime + LOOKAHEAD){
       const t=nextTime; const bars=track.chords.length; const bar=Math.floor(beat/4)%bars;
       const inBar=beat-Math.floor(beat/4)*4; const chord=track.chords[bar];
-      if(inBar<0.001 && track.pad!==false) mPad(chord,t,spb*4,track.padVol||0.045);
+      if(inBar<0.001 && track.pad!==false) mPad(chord,t,spb*4,track.padVol||0.03);
       if(track.bassPat){ const ch=track.bassPat[(Math.round(inBar*2))%8]; if(ch&&ch!=='.'){ const oct=ch==='L'?2:3; mBass(track.bassType||'triangle', rootf(chord,oct), t, spb*0.5, 0.12); } }
       if(track.arp){ const step=Math.round(inBar*2)%4; const tone=cf(chord, track.arpOct||4, [0,1,2,1][step]); mArp(track.arpType||'square', tone, t, spb*0.25, 0.03); }
       if(track.drums){ for(let s=0;s<2;s++){ const tt=t+s*spb*0.25; const idx=Math.round((beat+s*0.25)*4)%track.drums.length; const d=track.drums[idx];
@@ -1336,7 +1337,7 @@ function doContinue(){ continues++; lives=3; bombs=3; updBomb(); invuln=2.6; gra
   player.x=W/2; player.y=H-110;
   $('continueScreen').classList.add('hidden'); showBtns(true); state='play'; last=performance.now(); }
 function hurt(){ if(invuln>0)return; lives--; invuln=2.0; shake=reduce?6:20; flash=.34; hitstop=0.05; sfx.pdead(); chain=0;mult=1;
-  if(player.power>1)player.power--; burst(player.x,player.y,'#ff7ad0',20); player.x=W/2;player.y=H-110;
+  if(player.power>1)player.power--; burst(player.x,player.y,'#ff7ad0',20); /* その場復帰：位置は戻さない */
   for(let i=ebullets.length-1;i>=0;i--){ const b=ebullets[i]; if((b.x-player.x)**2+(b.y-player.y)**2<120*120)ebullets.splice(i,1); }
   if(lives<=0)onDeath(); }
 
