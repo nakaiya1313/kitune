@@ -136,12 +136,27 @@
 </div>
 
 <script>
-/* === 忍者AdMax 広告枠 ===
-   GitHub Pages 公開時は、#adSlotTop / #adSlotBig の中身を
-   忍者AdMax の iframe + document.write 方式スニペットに差し替えてください。
-   （例）injectAd('adSlotTop','ここに広告ID'); のように既存プロジェクトの
-   injectAd() ヘルパーを貼り付けても動きます。 */
-function injectAd(/* slotId, admaxId */){ /* paste Ninja AdMax snippet here */ }
+/* === 忍者AdMax 広告枠（iframe + document.write 方式） === */
+function injectAd(){
+  function put(slotId,src,w,h){
+    var el=document.getElementById(slotId); if(!el)return;
+    el.textContent='';
+    var f=document.createElement('iframe');
+    f.width=w; f.height=h; f.style.border='0'; f.style.overflow='hidden';
+    f.setAttribute('scrolling','no'); f.style.maxWidth='100%';
+    el.appendChild(f);
+    var d=f.contentWindow.document;
+    d.open();
+    d.write('<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;padding:0;overflow:hidden;}</style></head><body>'
+      +'<!-- admax --><scr'+'ipt src="'+src+'"><\/scr'+'ipt><!-- admax -->'
+      +'</body></html>');
+    d.close();
+  }
+  try{
+    put('adSlotTop','https://adm.shinobi.jp/s/32f21ba836f136a4c41601cb7eab5cd0',320,50);
+    put('adSlotBig','https://adm.shinobi.jp/s/38527600caaa476fd6105da55ddbe8be',300,250);
+  }catch(e){}
+}
 (function(){
 "use strict";
 const cv=document.getElementById('game'), ctx=cv.getContext('2d');
@@ -442,170 +457,6 @@ item1:[
 };
 /* --- ボス1：からかさ大化け「オボロ」（大傘・一つ目・舌） --- */
 Object.assign(SPRDEF,{
-bossKasa:[
-'...............ww...............',
-'..............wYYw..............',
-'...............rr...............',
-'..............rrrr..............',
-'............rrrRRrrr............',
-'..........rrrrrRRrrrrr..........',
-'........rrrrrrrRRrrrrrrr........',
-'......rrrrrrRrrRRrrRrrrrrr......',
-'....rrrrrrrrRrrRRrrRrrrrrrrr....',
-'...rrrrrrrrrRrrRRrrRrrrrrrrrr...',
-'..rrrrrrrrrrRrrRRrrRrrrrrrrrrr..',
-'.rwrrrrrrrrrRrrRRrrRrrrrrrrrwr..',
-'.kkkkkkkkkkkkkkkkkkkkkkkkkkkkk..',
-'..w..w..w..w..dd..w..w..w..w....',
-'..............dd................',
-'..............dd................',
-'...........wwWWWWww.............',
-'..........wWWWWWWWWw............',
-'..........WWWyKKyWWW............',
-'..........WWWKKKKWWW............',
-'..........wWWyKKyWWw............',
-'...........wWWWWWWw.............',
-'............wWWWWw..............',
-'............mmmm................',
-'...........mmmm.................',
-'..........mmm...................',
-'...........mm...................',
-'..............dd................',
-'..............dd................',
-'............dddddd..............',
-'...........dd.dd.dd.............',
-'..........kk..kk..kk............'],
-/* --- ボス2：大天狗「ハヤテ」（赤面・高鼻・黒翼・葉団扇） --- */
-bossTengu:[
-'.KKKk......................kKKK.',
-'KKKKKk....................kKKKKK',
-'KKKKKKk....wwwwwwww......kKKKKKK',
-'KKKKKKKk..wwwwwwwwww....kKKKKKKK',
-'KKKKKKKKkwwWwwwwwwWww..kKKKKKKKK',
-'KKKKKKKKkwwwrrrrrrwwwwkKKKKKKKKK',
-'.KKKKKKKkwrrrrrrrrrrwkKKKKKKKKK.',
-'.KKKKKKKkrrrKrrrrKrrrkKKKKKKKKK.',
-'..KKKKKKkrrKWrrrrWKrrkKKKKKKKK..',
-'..KKKKKKkrrrrrRRrrrrrkKKKKKKKK..',
-'...KKKKKkrrrrRRRRrrrrkKKKKKKK...',
-'...KKKKKkrrrrrRRrrrrrkKKKKKK....',
-'....KKKKkrrrrrRRrrrrrkKKKKK.....',
-'....KKKKkwrrrrRRrrrrwkKKKK......',
-'.....KKKkwwrrrkkrrrwwkKKK.......',
-'......KKkwwwrkkkkrwwwkKK........',
-'.......KkkwwwwwwwwwwkkK.........',
-'........kkkkkwwwwkkkkk..........',
-'.........bbbbbbbbbbbb...........',
-'........bbBBbbbbbbBBbb..........',
-'.......gbbbbbbbbbbbbbbg.........',
-'......gggbbbbbbbbbbbbggg........',
-'.....ggGgbbbbbbbbbbbbgGgg.......',
-'......gg.bbbBBBBBBbbb.gg........',
-'..........bbbbbbbbbb............',
-'..........bb..bb..bb............',
-'..........dd..dd..dd............',
-'..........dd..dd..dd............',
-'.........kkk..kk..kkk...........',
-'................................'],
-/* --- ボス3：雷鬼「ライデン」（青鬼・金角・太鼓） --- */
-bossOni:[
-'......yy............yy..........',
-'.....yYYy..........yYYy.........',
-'.....yYyy..........yyYy.........',
-'......yy....kkkk....yy..........',
-'......bbkkkbbbbbbkkkbb..........',
-'.....bbbbbbbbbbbbbbbbbb.........',
-'....bbbbbbbbbbbbbbbbbbbb........',
-'...bbbWWWbbbbbbbbbWWWbbbb.......',
-'...bbWyyWWbbbbbbWWyyWbbbb.......',
-'...bbWyKyWbbbbbbWyKyWbbbb.......',
-'...bbbWWWbbbbbbbbWWWbbbbb.......',
-'...bbbbbbbrrrrrrbbbbbbbbb.......',
-'....bbbbrrRRRRRRrrbbbbbb........',
-'....bbbbrWWrrrrWWrbbbbbb........',
-'.....bbbrrrrrrrrrrbbbbb.........',
-'......bbbrrRRRRrrbbbbb..........',
-'.......bbbbbbbbbbbbbb...........',
-'....yyybbbbbbbbbbbbyyy..........',
-'...yYyybbbbbbbbbbbbyyYy.........',
-'...yy.bbbbbbbbbbbbbb.yy.........',
-'......bbbbrrrrrrbbbb............',
-'.....bbbb.rrrrrr.bbbb...........',
-'.....bbb.rrWWWWrr.bbb...........',
-'.....bb..rWkkkkWr..bb...........',
-'.........rWkWWkWr...............',
-'.........rWkkkkWr...............',
-'..........rWWWWr................',
-'...........rrrr.................',
-'.........kk....kk...............',
-'........kkk....kkk..............'],
-/* --- ボス4：九尾「コハク」（白狐・九つの炎尾） --- */
-bossKitsune:[
-'..c......c............c......c..',
-'.cc..w..cc....ww......cc..w..cc.',
-'.ccc.ww.ccc..wwww....ccc.ww.ccc.',
-'..cc.www.cc..wwww...cc..www.cc..',
-'..ccc.www.cc.wwww..cc.www.ccc...',
-'...cc..www.ccwwwwcc.www...cc....',
-'...ccc..wwwwwwwwwwwwww...ccc....',
-'....cc...wwwwwwwwwwww....cc.....',
-'....wk..wwwwwwwwwwwwww..kw......',
-'....wwk.wwfWWwwwwWWfww.kww......',
-'....wwwwwwfKWwwwwWKfwwwwww......',
-'.....wwwwwwwwwrrwwwwwwwww.......',
-'......wwwwwwwwrrwwwwwwww........',
-'.......wwwwwwwwwwwwwwww.........',
-'......ffwwwwwwwwwwwwff..........',
-'.....ff..wwwwwwwwwww.ff.........',
-'.....f...wwwwwwwwwww..f.........',
-'.........wwwwwwwwww.............',
-'........wwww..wwww..............',
-'.......www......www.............',
-'......www........www............',
-'.....ww............ww...........',
-'....ww..............ww..........',
-'................................',
-'................................',
-'................................',
-'................................',
-'................................',
-'................................',
-'................................'],
-/* --- ボス5：月帝「ツクヨミ」（月輪・十二単の月神） --- */
-bossTsuku:[
-'..........yyyyyyyyyy............',
-'........yy..........yy..........',
-'.......y..............y.........',
-'......y................y........',
-'......y................y........',
-'.....y..................y.......',
-'.....y......KKKKK.......y.......',
-'.....y....KKKKKKKKK.....y.......',
-'.....y...KKKKKKKKKKK....y.......',
-'......y..KKwwwwwwwKK...y........',
-'......y..KwwwwwwwwwK...y........',
-'.......y.wwWwwwwwWww..y.........',
-'........ywwKwwwwwKwwy...........',
-'.........wwwwwwwwwww............',
-'.........wwwwwrrwwww............',
-'..........wwwwwwww..............',
-'........ppwwwwwwwwpp............',
-'......pppppwwwwwwppppp..........',
-'.....pppPpppppppppPpppp.........',
-'....pppPPppppppppPPppppp........',
-'....ppPPpppyyyypppPPpppp........',
-'...pppPppppyYYypppPpppppp.......',
-'...ppPPppppyYYypppPPppppp.......',
-'...ppPpppppyyyyppppPppppp.......',
-'..pppPpppppppppppppPpppppp......',
-'..ppPPpppppppppppppPPppppp......',
-'..ppPpppppppppppppppPppppp......',
-'.pppPppppppppppppppppPppppp.....',
-'.ppPPppppppppppppppppPPpppp.....',
-'.pppppppppppppppppppppppppp.....',
-'..pppppppppppppppppppppppp......',
-'....pppppppppppppppppppp........'],
-/* --- 背景小物 --- */
 torii:[
 'rrrrrrrrrrrrrrrrrrrrrrrr',
 '.rrrrrrrrrrrrrrrrrrrrrr.',
@@ -672,6 +523,190 @@ hoshi:[
 '..y..',
 '..y..'],
 });
+Object.assign(SPRDEF,{
+bossKasa:[
+'..................yy..................',
+'.................yYYy.................',
+'..................PP..................',
+'.................PppP.................',
+'................PpppppP...............',
+'..............PppPppppPP..............',
+'.............PpppPpppppPP.............',
+'...........PPppppPPpppppPP............',
+'..........PPpppppP.ppppppPP...........',
+'.........PPpppppP.pppPppppPP..........',
+'........PPpppppP.pppPPpppppPP.........',
+'......PPpppppPP.pppPP.pppppPPP........',
+'.....PPpppppP..pppPP...pppppPPP.......',
+'....PPpppppP..pppPP.....ppppppPP......',
+'...PPpppppP..pppPP.......pppppPPP.....',
+'..PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP....',
+'..RwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwR....',
+'...wwwwwwwwwwwwwwwwwwwwwwwwwwwww......',
+'...wwwwwwwwwwKKKKKKKKKKwwwwwwwww......',
+'...wwwwwwwwwKKWWWWWWccKKwwwwwwww......',
+'...wwwwwwwwwKWWWWWWWWccKwwwwwwww......',
+'...wwwwwwwwwKWWWccccWWWKwwwwwwww......',
+'...wwwwwwwwwKKccccccccKKwwwwwwww......',
+'....wwwwwwwwwKKKKKKKKKKwwwwwwww.......',
+'....wwwwwKKKKKKKKKKKKKKKKKKwwww.......',
+'.....wwwKKrrrmmmmmmmmmmrrrKKwww.......',
+'......wwwKKKmmmmmmmmmmmmKKKwww........',
+'.......wwwwKKKmmmmmmmmKKKwwww.........',
+'.........wwwwKKmmmmmmKKwww............',
+'..............KKmmmmK.................',
+'...............KmmmK..................',
+'................KmKDdD................',
+'.................KKDdD................',
+'...................DdD................',
+'...................DdD................',
+'..................DDdDD...............',
+'...............KKKKDdDKKKK............',
+'...............KKKKKKKKKKK............',
+'..............KK.........KK...........',
+],
+bossTengu:[
+'..................kKKk..................',
+'.................kKnnKk.................',
+'............WW...kKnnKk...WW............',
+'...........WWWW..kKKKKk..WWWW...........',
+'..KK......WWWWWWwwwwwwwwWWWWWW......KK..',
+'.KKKK....WWWwwwwwwwwwwwwwwwwWWW....KKKK.',
+'KKKKKK...WWwwWWWWwwwwwwWWWWwwWW...KKKKKK',
+'KKnKKKK..WwwWWWWWWwwwwWWWWWWwwW..KKKKnKK',
+'KKnnKKKK.wwwWWWWWWrrrrWWWWWWwww.KKKKnnKK',
+'KKnnnKKKKwwwrrrrrrrrrrrrrrrrwwwKKKKnnnKK',
+'.KKnnKKKKwwrrrrKKrrrrrrKKrrrrwwKKKKnnKK.',
+'.KKnnnKKKwwrrrKWKrrrrrrKWKrrrwwKKKnnnKK.',
+'..KKnnKKKwwrrrrKKrrRRrrKKrrrrwwKKKnnKK..',
+'..KKnnnKKwwWrrrrrrRRRRrrrrrrWwwKKnnnKK..',
+'...KKnnKKwWWWrrrrrRRRRrrrrrWWWwKKnnKK...',
+'...KKnnKKwWWWWrrrrRRRRrrrrWWWWwKKnnKK...',
+'....KKnKKwwWWWWrrrRRRRrrrWWWWwwKKnKK....',
+'....KKKKK.wwWWWWrrrRRrrrWWWWww.KKKKK....',
+'.....KKK...wwWWWWWrrrrWWWWWww...KKK.....',
+'......K.....wwwWWWWWWWWWWwww.....K......',
+'..gg..........bbbBBBBbbbb...............',
+'.gGGg........bbbbBbbBbbbbb..............',
+'.gGGgg......bbbbbBbbBbbbbbb.............',
+'..gGGgg....bbbbbbBbbBbbbbbbb............',
+'...gGgggddddbbbbbBBBBbbbbbbbb...........',
+'....ggg..d..bbbbbbbbbbbbbbbbb...........',
+'.........d..bbbbbbbbbbbbbbbb............',
+'.........d.bbBBbbbbbbbbBBbb.............',
+'...........bBBbb......bbBBb.............',
+'...........BBb..........bBB.............',
+'..........KKK............KKK............',
+'.........KKKK............KKKK...........',
+],
+bossOni:[
+'....DdD..........................DdD....',
+'...DrrrD..ww..............ww....DrrrD...',
+'..DrwwrD..wWw............wWw....DrwwrD..',
+'..DrwwrD...wWw..........wWw.....DrwwrD..',
+'..DrrrrD....wWwkKKKKKKkwWw......DrrrrD..',
+'...DddD....kkKWkKKKKKKkWKkk......DddD...',
+'....D.....kKKKKKKKKKKKKKKKKk......D.....',
+'..........kKKKKKKKKKKKKKKKKk............',
+'.........kKKyyyyyyyyyyyyyyKKk...........',
+'.........kKyyyyyyyyyyyyyyyyKk...........',
+'....DdD..kKyyKKKyyyyyyKKKyyyKk..DdD.....',
+'...DrrrD.kKyyKWKKyyyyKKWKyyyKk.DrrrD....',
+'...DrwwrDkKyyKKKKyyyyKKKKyyyKkDrwwrD....',
+'...DrwwrDkKyyyyyyyooyyyyyyyyKkDrwwrD....',
+'...DrrrrD.KyyyyyooooooyyyyyyK.DrrrrD....',
+'....DddD..KyyKKKKKKKKKKKKyyyK..DddD.....',
+'.....D....KyyKWwKKKKKKwWKyyyK....D......',
+'..........KyyyKKKKKKKKKKyyyK............',
+'..........KKyyyyyyyyyyyyyyKK............',
+'........yyyKKyyyyyyyyyyyyKKyyy..........',
+'.......yyyyyKKyyyyyyyyyyKKyyyyy.........',
+'......yyyyy..KyyyyyyyyyyK..yyyyy........',
+'.....yyyKK...KyyyyyyyyyyK...KKyyy.......',
+'.....yyK.....KyyyyyyyyyyK.....Kyy.......',
+'.....KK......KyyyyyyyyyyK......KK.......',
+'.............KyKKyyyyKKyK...............',
+'.............KyKKyyyyKKyK...............',
+'.............KyyyyKKyyyyK...............',
+'.............KKyyyKKyyyKK...............',
+'..............KyyyKKyyyK................',
+'..............KyyK..KyyK................',
+'..............KyyK..KyyK................',
+'.............KKKK....KKKK...............',
+'.............KKK......KKK...............',
+],
+bossKitsune:[
+'..c...w.....w....ww....w.....w...c......',
+'.ccc..ww...www...ww...www...ww..ccc.....',
+'.cWc.www...wWw..wWWw..wWw...www.cWc.....',
+'..w..wWw..wWWw..wWWw..wWWw..wWw..w......',
+'.www.wWWw.wWWw.wWWWWw.wWWw.wWWw.www.....',
+'.wWw.wWWw.wWWWwwWWWWwwWWWw.wWWw.wWw.....',
+'.wWWwwWWWwwWWWWwWWWWwWWWWwwWWWwwWWw.....',
+'..wWWwWWWWwWWWWWWWWWWWWWWwWWWWwWWw......',
+'..wWWWwWWWWWWWWWWWWWWWWWWWWWWwWWWw......',
+'...wWWWWWWWWWWWWWWWWWWWWWWWWWWWWw.......',
+'....wwWWWWWWWWWWWWWWWWWWWWWWWWww........',
+'......wwWWWWWWWWWWWWWWWWWWWWww..........',
+'....kw....wwWWWWWWWWWWww....wk..........',
+'...kWWw.....wwwwwwwwww.....wWWk.........',
+'...kWrWw..................wWrWk.........',
+'...kWrrWwwwwwwwwwwwwwwwwwWWrrWk.........',
+'....kWWWWWwwwwwwwwwwwwwWWWWWWk..........',
+'....kWWWWWWWwwwwwwwwwWWWWWWWk...........',
+'.....kWWrrKKWWwwwwwWWKKrrWWk............',
+'.....kWWrrKcKWWwwwWWKcKrrWWk............',
+'......kWWWKKKWWwwwWWKKKWWWk.............',
+'......kWWWWWWWWmmmWWWWWWWWk.............',
+'.......kWWWWWWWKmKWWWWWWWk..............',
+'.......kWWWWWWWKKKWWWWWWk...............',
+'........kWWWWWWWWWWWWWWk................',
+'.........kWWWWWWWWWWWWk.................',
+'.........kWWwWWWWWWwWWk.................',
+'........kWWwwWWWWWWwwWWk................',
+'........kWWw..WWWW..wWWk................',
+'.......kWWw...WWWW...wWWk...............',
+'.......kkk...kWWWWk...kkk...............',
+'.............kkkkkk.....................',
+],
+bossTsuku:[
+'...............YYYY.....................',
+'.............YYyyyyYY...................',
+'............YyyYYYYyyY..................',
+'...........YyyY....YyyY.................',
+'...........YyY.......YY.................',
+'...........YyY..KKKK....................',
+'...........YyyYKKKKKK...................',
+'............YYKKKKKKKK..................',
+'.............KKKKKKKKKK.................',
+'.............KKKKKKKKKK.................',
+'..............ssssssss..................',
+'..............sswsswss..................',
+'..............sKssssKs..................',
+'..............ssssssss..................',
+'...............ssRRss...................',
+'................ssss....................',
+'..............eeeeeeee..................',
+'.............eeePPPPeee.................',
+'............eeePyyyyPeee................',
+'...........eeePPyyyyPPeee...............',
+'..........eeePPPyyyyPPPeee..............',
+'..Y......eeePPePyyyyPePPeee......Y......',
+'.YyY....eeePPeePYYYYPeePPeee....YyY.....',
+'..Y....eeePPeeePYYYYPeeePPeee....Y......',
+'......eeePPeeeePyyyyPeeeePPeee..........',
+'.....eeePPeeeeePyyyyPeeeeePPeee.........',
+'....eeePPeeeeeePyyyyPeeeeeePPeee........',
+'....eePPeeeeeeePYYYYPeeeeeeePPee........',
+'....ePPeeeeeeeePYYYYPeeeeeeeePPe........',
+'....PPeeeeeeeeePPPPPPeeeeeeeeePP........',
+'....PeeeeeeeeeeeeeeeeeeeeeeeeeP.........',
+'.....eeee..eeeeeeeeeeeeee..eeee.........',
+'......YY....YY......YY....YY............',
+'.....YyyY..YyyY....YyyY..YyyY...........',
+],
+});
+
 /* スプライト生成（1セル=1px のオフスクリーンキャンバス） */
 const SPR={};
 (function buildSprites(){
@@ -879,8 +914,8 @@ const MUSIC={
 };
 /* ============================================================ GAME DEFS ============================================================ */
 const DIFFS={ easy:{label:'EASY',spd:0.85,dens:0.72,fireMul:1.25,hp:0.85,bossHp:0.78},
-              normal:{label:'NORMAL',spd:1.0,dens:1.0,fireMul:1.0,hp:1.0,bossHp:1.0},
-              hard:{label:'HARD',spd:1.18,dens:1.42,fireMul:0.8,hp:1.35,bossHp:1.24} };
+              normal:{label:'NORMAL',spd:1.05,dens:1.15,fireMul:0.92,hp:1.0,bossHp:1.05},
+              hard:{label:'HARD',spd:1.32,dens:1.85,fireMul:0.58,hp:1.6,bossHp:1.42} };
 let DM={spd:1,dens:1,fireMul:1,hp:1}, diffKey='normal';
 const SP=s=>s*DM.spd, CNT=n=>Math.max(3,Math.round(n*DM.dens)), FR=t=>t*DM.fireMul;
 
@@ -913,6 +948,14 @@ const EK={
  shiki_st  :{spr:'shiki',     size:44, hp:3,  sc:220, sp:120, beh:'striker'},
  suzu_f    :{spr:'suzu',      size:42, hp:4,  sc:300, sp:42,  beh:'floater', deathfire:'ring8'},
  karasu_g  :{spr:'karasu',    size:46, hp:3,  sc:170, sp:96,  beh:'glider'},
+ hitodama_r:{spr:'hitodama',  size:44, hp:3,  sc:340, sp:70,  beh:'riser'},
+ onibi_r   :{spr:'onibi',     size:44, hp:3,  sc:300, sp:64,  beh:'riser', deathfire:'ring6'},
+ shiki_x   :{spr:'shiki',     size:44, hp:3,  sc:360, sp:110, beh:'rusher', deathfire:'scatter'},
+ suzu_x    :{spr:'suzu',      size:42, hp:4,  sc:380, sp:46,  beh:'floater', deathfire:'scatter'},
+ kasako_a  :{spr:'kasako',    size:44, hp:2,  sc:200, sp:120, beh:'ambusher'},
+ karasu_a  :{spr:'karasu',    size:46, hp:3,  sc:230, sp:135, beh:'ambusher'},
+ chochin_x :{spr:'chochin',   size:48, hp:7,  sc:600, sp:36,  beh:'turret', deathfire:'aimed3'},
+ kumobo_x  :{spr:'kumobo',    size:48, hp:4,  sc:360, sp:78,  beh:'diver',  deathfire:'scatter'},
 };
 
 /* ---------- 状態 ---------- */
@@ -957,6 +1000,8 @@ function onKill(e){ chain++; chainT=2.5; mult=Math.min(8,1+Math.floor(chain/6));
   addScore(e.sc*mult); burst(e.x,e.y,'#ff9f43',12); sfx.boom();
   if(e.deathfire==='ring6')ring(e.x,e.y,6,SP(92),rnd(0,TAU),{c:'#7fe0ff',r:5});
   if(e.deathfire==='ring8')ring(e.x,e.y,8,SP(96),rnd(0,TAU),{c:'#ffd166',r:5});
+  if(e.deathfire==='scatter')scatter(e.x,e.y,CNT(9),SP(70),SP(170),{c:'#ff9f43',r:5});
+  if(e.deathfire==='aimed3')aimed(e.x,e.y,SP(175),CNT(3),0.22,{c:'#ff5a49'});
   if(e.drop)dropItem(e.x,e.y,e.drop);
   else if(Math.random()<0.09)dropItem(e.x,e.y,'power');
   else if(Math.random()<0.03)dropItem(e.x,e.y,'bomb'); }
@@ -968,6 +1013,9 @@ function spawnEnemy(kind,x,o){ o=o||{}; const t=EK[kind]; const from=o.from||'to
     t:0,age:0,fireT:rnd(0.4,1.4)*DM.fireMul,spin:0,flash:0,firing:0,dir:Math.random()<.5?-1:1,
     drop:o.drop||null,phase:rnd(0,TAU)};
   if(from==='left'){e.x=-26;e.y=o.y!=null?o.y:rnd(60,220);} if(from==='right'){e.x=W+26;e.y=o.y!=null?o.y:rnd(60,220);}
+  if(t.beh==='riser'){e.y=o.y!=null?o.y:H+26;}
+  if(t.beh==='ambusher'){const L=Math.random()<.5; e.x=L?-26:W+26; e.dir=L?1:-1; e.y=o.y!=null?o.y:rnd(90,H*0.55);}
+  e.willShoot=['glider','weaver','diver','rusher','ambusher'].includes(t.beh)&&Math.random()<0.30*DM.dens;
   enemies.push(e); return e; }
 function q(d,kind,x,o){ spawnQueue.push({d,kind,x,o:o||{}}); }
 function line(kind,n,o){ const m=54,gap=(W-2*m)/(n-1||1); for(let i=0;i<n;i++)q(i*0.12,kind,m+gap*i,o); }
@@ -1000,13 +1048,14 @@ function buildScript(i){ const s=[]; const at=(t,fn)=>s.push({at:t,fn});
     at(11,()=>{ q(0,'chochin',90); q(0,'chochin',W-90); });
     at(14.5,()=>vform('karasu_d',CNT(5)));
     at(18,()=>{ line('kasako',CNT(5)); q(0.8,'hitodama',W/2); });
-    at(22,()=>{ streamE('shiki',CNT(5),100,0.22); q(1,'suzu',W-100); });
+    at(22,()=>{ streamE('shiki',CNT(5),100,0.22); q(1,'suzu',W-100); q(0.4,'karasu_a',0,{}); q(0.9,'karasu_a',0,{}); });
     at(26,()=>{ q(0,'kazaguruma',W/2); q(0.5,'onibi',70); q(0.5,'onibi',W-70); });
     at(31,()=>{ vform('karasu',CNT(6)); q(1.2,'hitodama',110); q(1.2,'hitodama',W-110); });
-    at(36,()=>{ streamE('shiki',CNT(6),W/2,0.2); });
+    at(36,()=>{ streamE('shiki_x',CNT(5),W/2,0.2); q(0.5,'kasako_a',0,{}); q(1.0,'kasako_a',0,{}); });
     at(40,()=>{ q(0,'komainu',130,{drop:'power'}); q(0,'komainu',W-130); });
     at(46,()=>{ line('karasu_d',CNT(5)); q(0.8,'suzu',90); q(0.8,'suzu',W-90); });
     at(51,()=>{ q(0,'chochin',W/2); streamE('kasako',CNT(5),70,0.28); streamE('kasako',CNT(5),W-70,0.28); });
+    at(56,()=>{ q(0,'hitodama_r',100); q(0.3,'hitodama_r',W-100); });
     at(57,()=>{ vform('shiki',CNT(6)); q(1.4,'hitodama',W/2,{drop:'bomb'}); });
     at(63,()=>{ streamE('karasu_d',CNT(6),100,0.2); streamE('karasu_d',CNT(6),W-100,0.2); });
   }
@@ -1017,13 +1066,13 @@ function buildScript(i){ const s=[]; const at=(t,fn)=>s.push({at:t,fn});
     at(12.5,()=>{ q(0,'kazaguruma',110); q(0,'kazaguruma',W-110); });
     at(16.5,()=>vform('karasu',CNT(6)));
     at(20,()=>{ q(0,'suzu_f',70); q(0.3,'suzu_f',W/2); q(0.6,'suzu_f',W-70); });
-    at(24.5,()=>{ streamE('kumobo',CNT(5),90,0.26); streamE('kumobo',CNT(5),W-90,0.26); });
+    at(24.5,()=>{ streamE('kumobo_x',CNT(4),90,0.28); streamE('kumobo',CNT(5),W-90,0.26); q(0.6,'kasako_a',0,{}); });
     at(29,()=>{ q(0,'chochin_s',W/2); line('kasako',CNT(4)); });
     at(33.5,()=>{ q(0,'hitodama',100); q(0,'hitodama',W-100); q(0.6,'onibi',W/2); });
-    at(38,()=>{ vform('kumobo',CNT(5)); q(1,'suzu',W/2); });
+    at(38,()=>{ vform('kumobo',CNT(5)); q(1,'suzu_x',W/2); q(0.3,'onibi_r',80); q(0.6,'onibi_r',W-80); });
     at(42.5,()=>q(0,'komainu',W/2,{drop:'power'}));
     at(48,()=>{ streamE('shiki',CNT(5),80,0.22); streamE('shiki',CNT(5),W-80,0.22); });
-    at(53,()=>{ q(0,'kazaguruma',W/2); q(0.5,'suzu_f',90); q(0.5,'suzu_f',W-90); });
+    at(53,()=>{ q(0,'kazaguruma',W/2); q(0.5,'suzu_x',90); q(0.5,'suzu_x',W-90); q(0.9,'hitodama_r',W/2); });
     at(58,()=>{ line('kumobo',CNT(6)); q(1.2,'chochin',W/2,{drop:'bomb'}); });
     at(64,()=>{ vform('karasu_d',CNT(6)); streamE('kasako',CNT(4),W/2,0.3); });
   }
@@ -1032,15 +1081,16 @@ function buildScript(i){ const s=[]; const at=(t,fn)=>s.push({at:t,fn});
     at(4.5,()=>{ streamE('onibi_s',CNT(4),120,0.3); streamE('onibi_s',CNT(4),W-120,0.3); });
     at(9,()=>{ q(0,'kazaguruma',W/2); vform('shiki_st',CNT(5)); });
     at(13.5,()=>{ q(0,'chochin_s',100); q(0,'chochin_s',W-100); });
-    at(18,()=>{ line('kasako',CNT(6)); q(1,'hitodama',W/2); });
+    at(18,()=>{ line('kasako',CNT(6)); q(1,'hitodama',W/2); q(0.4,'hitodama_r',70); q(0.7,'hitodama_r',W-70); });
     at(22.5,()=>{ streamE('shiki_st',CNT(6),W/2,0.2); q(1.2,'suzu_f',80); q(1.2,'suzu_f',W-80); });
     at(27.5,()=>{ q(0,'kazaguruma',80); q(0,'kazaguruma',W-80); q(0.6,'onibi_s',W/2); });
     at(32,()=>{ vform('karasu_d',CNT(6)); q(1,'hitodama',110); q(1,'hitodama',W-110); });
     at(37,()=>{ q(0,'komainu',110); q(0.4,'komainu',W-110,{drop:'power'}); });
     at(43,()=>{ streamE('kumobo_f',CNT(5),100,0.26); streamE('kumobo_f',CNT(5),W-100,0.26); });
-    at(48,()=>{ q(0,'chochin_s',W/2); line('shiki_w',CNT(5)); });
+    at(48,()=>{ q(0,'chochin_x',W/2); line('shiki_x',CNT(4)); q(0.6,'karasu_a',0,{}); });
     at(52.5,()=>{ q(0,'suzu_f',70); q(0.25,'suzu_f',W/2-60); q(0.5,'suzu_f',W/2+60); q(0.75,'suzu_f',W-70); });
     at(57.5,()=>{ vform('hitodama',CNT(5)); streamE('shiki_st',CNT(5),W/2,0.2); });
+    at(62,()=>{ q(0,'onibi_r',90); q(0.25,'onibi_r',W-90); q(0.5,'hitodama_r',W/2); });
     at(62.5,()=>{ q(0,'kazaguruma',W/2,{drop:'bomb'}); line('karasu',CNT(6)); });
     at(67,()=>{ streamE('onibi_s',CNT(6),90,0.24); streamE('onibi_s',CNT(6),W-90,0.24); });
   }
@@ -1051,14 +1101,17 @@ function buildScript(i){ const s=[]; const at=(t,fn)=>s.push({at:t,fn});
     at(13,()=>{ q(0,'chochin_s',W/2); q(0.5,'hitodama',90); q(0.5,'hitodama',W-90); });
     at(17.5,()=>{ vform('kumobo',CNT(6)); q(1,'suzu_f',W/2); });
     at(22,()=>{ q(0,'komainu',100); q(0.4,'komainu',W-100); });
-    at(27.5,()=>{ streamE('shiki_st',CNT(7),W/2,0.18); line('kasako',CNT(5)); });
+    at(26,()=>{ q(0,'hitodama_r',90); q(0.3,'hitodama_r',W-90); q(0.6,'onibi_r',W/2); });
+    at(27.5,()=>{ streamE('shiki_st',CNT(7),W/2,0.18); line('kasako',CNT(5)); q(0.5,'karasu_a',0,{}); q(1.0,'karasu_a',0,{}); });
     at(32.5,()=>{ q(0,'kazaguruma',70); q(0,'kazaguruma',W-70); q(0.6,'chochin',W/2,{drop:'power'}); });
-    at(37.5,()=>{ vform('hitodama',CNT(5)); streamE('onibi_s',CNT(5),W/2,0.24); });
+    at(37.5,()=>{ vform('hitodama',CNT(5)); streamE('onibi_s',CNT(5),W/2,0.24); q(0.4,'suzu_x',110); q(0.8,'suzu_x',W-110); });
     at(42.5,()=>{ q(0,'suzu_f',60); q(0.2,'suzu_f',140); q(0.4,'suzu_f',W-140); q(0.6,'suzu_f',W-60); });
-    at(47.5,()=>{ streamE('karasu_d',CNT(7),100,0.18); streamE('shiki',CNT(6),W-100,0.2); });
+    at(46,()=>{ q(0,'onibi_r',70); q(0.25,'onibi_r',W-70); q(0.5,'hitodama_r',W/2); q(0.9,'kasako_a',0,{}); });
+    at(47.5,()=>{ streamE('karasu_d',CNT(7),100,0.18); streamE('shiki_x',CNT(6),W-100,0.2); });
     at(53,()=>{ q(0,'komainu',W/2,{drop:'bomb'}); q(0.8,'kazaguruma',110); q(0.8,'kazaguruma',W-110); });
-    at(59,()=>{ line('kumobo_f',CNT(6)); q(1.2,'chochin_s',W/2); });
-    at(64,()=>{ vform('shiki_st',CNT(7)); q(1,'hitodama',80); q(1,'hitodama',W-80); });
+    at(59,()=>{ line('kumobo_f',CNT(6)); q(1.2,'chochin_x',W/2); q(0.4,'kumobo_x',120); q(0.7,'kumobo_x',W-120); });
+    at(63,()=>{ q(0,'hitodama_r',80); q(0.2,'hitodama_r',W-80); q(0.4,'onibi_r',W/2-60); q(0.6,'onibi_r',W/2+60); });
+    at(64,()=>{ vform('shiki_st',CNT(7)); q(1,'hitodama',80); q(1,'hitodama',W-80); q(1.4,'karasu_a',0,{}); });
     at(69,()=>{ streamE('kasako',CNT(6),90,0.22); streamE('kasako',CNT(6),W-90,0.22); q(2,'onibi',W/2,{drop:'power'}); });
   }
   return s; }
@@ -1084,9 +1137,16 @@ function updEnemy(e,dt){ e.t+=dt; e.spin+=dt*2.4; if(e.flash>0)e.flash-=dt; if(e
    case 'diver': if(e.t<0.9){e.y+=e.sp*dt;} else { e.y+=e.sp*dt*2.6; e.x+=(e.dived?0:(player.x-e.x))*dt*2.2; if(e.t>1.6)e.dived=true; } break;
    case 'rusher': { const a=Math.atan2(player.y-e.y,player.x-e.x); if(e.y<player.y-40){ e.x+=Math.cos(a)*e.sp*dt; e.y+=Math.sin(a)*e.sp*dt; } else e.y+=e.sp*dt; } break;
    case 'striker': if(e.t<0.7)e.y+=e.sp*dt; else if(e.t<1.0){} else e.y+=e.sp*dt*2.4; break;
+   case 'riser': e.y-=e.sp*dt; e.x+=Math.sin(e.t*2.2+e.phase)*40*dt;
+     if(!e.rShot&&e.y<H*0.72){ e.rShot=true; aimed(e.x,e.y,SP(165),CNT(3),0.2,{c:'#7fe0ff'}); e.firing=0.28; sfx.hit(); }
+     if(!e.rShot2&&e.y<H*0.4){ e.rShot2=true; needle(e.x,e.y,SP(215),{c:'#ffd166'}); sfx.hit(); }
+     if(e.y<-40)e.dead=true; break;
+   case 'ambusher': e.x+=e.dir*e.sp*dt; e.y+=Math.sin(e.t*2.6+e.phase)*55*dt;
+     if(!e.aShot&&((e.dir>0&&e.x>W*0.3)||(e.dir<0&&e.x<W*0.7))){ e.aShot=true; aimed(e.x,e.y,SP(155),CNT(2),0.3,{c:'#c98bff'}); e.firing=0.28; sfx.hit(); } break;
    case 'mine': e.y+=e.sp*dt*0.6; e.x+=Math.sin(e.t*2+e.phase)*30*dt;
      if(!e.blown && Math.hypot(player.x-e.x,player.y-e.y)<96){ e.blown=true; ring(e.x,e.y,CNT(10),SP(120),rnd(0,TAU),{c:'#ffd166'}); sfx.boom(); e.dead=true; burst(e.x,e.y,'#ffd166',10);} break;
    default: e.y+=e.sp*dt; }
+  if(e.willShoot&&!e.wDone&&e.y>120&&e.y<H*0.6){ e.wDone=true; aimed(e.x,e.y,SP(150),1,0,{c:'#ff5a49'}); e.firing=0.28; sfx.hit(); }
   if(['turret','spinner','sniper','bomber','floater'].includes(e.beh)){
     e.fireT-=dt; if(e.fireT<=0 && e.y>0 && e.y<H*0.75){ enemyFire(e); e.fireT=FR(e.beh==='spinner'?1.5:e.beh==='sniper'?1.7:e.beh==='bomber'?2.0:1.9)*rnd(0.85,1.2); } }
 }
@@ -1095,16 +1155,16 @@ function updEnemy(e,dt){ e.t+=dt; e.spin+=dt*2.4; if(e.flash>0)e.flash-=dt; if(e
    オボロ=跳ねる傘、ハヤテ=瞬間移動と風、ライデン=雷柱と太鼓、
    コハク=分身と狐火、ツクヨミ=満ち欠けの月光弾幕 */
 const BOSSES={
- B_kasa:{ name:'からかさ大化け  オボロ', spr:'bossKasa', scale:4, hp:640, accent:'#ff5a49', track:'b1', move:'hop',
+ B_kasa:{ name:'からかさ大化け  オボロ', spr:'bossKasa', scale:1.6, hp:700, accent:'#ff5a49', track:'b1', move:'hop',
    phases:[ ['spinRain','tongueAim','drizzle'], ['rainWall','spinRain','tongueAim','hopBurst'], ['drizzle','rainWall','hopBurst','spinRain','tongueAim'] ] },
- B_tengu:{ name:'大天狗  ハヤテ', spr:'bossTengu', scale:4, hp:840, accent:'#6fe3a0', track:'b2', move:'dart',
+ B_tengu:{ name:'大天狗  ハヤテ', spr:'bossTengu', scale:1.6, hp:920, accent:'#6fe3a0', track:'b2', move:'dart',
    phases:[ ['feathers','fanSweep','leafSpiral'], ['teleport','feathers','gustWall','fanSweep'], ['teleport','leafSpiral','gustWall','feathers','fanSweep'] ] },
- B_oni:{ name:'雷鬼  ライデン', spr:'bossOni', scale:4, hp:960, accent:'#ffd166', track:'b3', move:'anchor',
+ B_oni:{ name:'雷鬼  ライデン', spr:'bossOni', scale:1.6, hp:1060, accent:'#ffd166', track:'b3', move:'anchor',
    phases:[ ['zigzag','thunderRing','drumWave'], ['pillar','zigzag','thunderRing','drumWave'], ['crossBolt','pillar','zigzag','thunderRing','drumWave'] ] },
- B_kitsune:{ name:'九尾  コハク', spr:'bossKitsune', scale:4, hp:1120, accent:'#7fe0ff', track:'b4', move:'glide',
+ B_kitsune:{ name:'九尾  コハク', spr:'bossKitsune', scale:1.6, hp:1120, accent:'#7fe0ff', track:'b4', move:'glide',
    phases:[ ['foxSpiral','charmRain','homingFire'], ['clones','foxSpiral','flameWheel','charmRain'],
             ['clones','homingFire','foxSpiral','flameWheel'], ['clones','flameWheel','foxSpiral','homingFire','charmRain'] ] },
- B_tsuku:{ name:'月帝  ツクヨミノミコト', spr:'bossTsuku', scale:4, hp:2700, accent:'#ffd166', track:'b5', move:'regal',
+ B_tsuku:{ name:'月帝  ツクヨミノミコト', spr:'bossTsuku', scale:1.7, hp:2700, accent:'#ffd166', track:'b5', move:'regal',
    phases:[ ['crescents','starRain'], ['waxwane','crescents','galaxy'], ['moonbeam','starRain','crescents','waxwane'],
             ['galaxy','moonbeam','waxwane','crescents'], ['lunarOmni','galaxy','moonbeam','starRain'],
             ['lunarOmni','moonbeam','galaxy','waxwane','crescents','starRain'] ] },
@@ -1127,34 +1187,34 @@ function bossFire(b){ const cdm=Math.max(0.5,1-(b.phaseN-1)*0.12);
   const cR='#ff5a49', cC='#7fe0ff', cY='#ffd166', cP='#c98bff', cM='#ff7ad0', cG='#6fe3a0';
   switch(pat){
    /* ---- オボロ：傘 ---- */
-   case 'spinRain': b.stream={left:bc(30),every:0.05,cd:1.1,t:0,step:s=>{ s.spin+=0.32;
-     for(let a=0;a<2;a++){ const an=s.spin+a*Math.PI; eb(x,y,Math.cos(an)*SP(140),Math.sin(an)*SP(140),{c:cR}); } }}; break;
-   case 'rainWall': { const n=bc(9),gap=1+Math.floor(rnd(0,n-2)); wall(b.y+10,n,gap,SP(150),{c:cC,kind:'drop',r:4.5});
-     b.atk=FR(1.05)*cdm; sfx.hit(); } break;
-   case 'tongueAim': aimed(x,y+18,SP(205),bc(3),0.15,{c:cM}); b.atk=FR(0.9)*cdm; sfx.hit(); break;
+   case 'spinRain': b.stream={left:bc(34),every:0.045,cd:0.95,t:0,step:s=>{ s.spin+=0.34;
+     for(let a=0;a<2;a++){ const an=s.spin+a*Math.PI; eb(x,y,Math.cos(an)*SP(152),Math.sin(an)*SP(152),{c:cR}); } }}; break;
+   case 'rainWall': { const n=bc(10),gap=1+Math.floor(rnd(0,n-2)); wall(b.y+10,n,gap,SP(168),{c:cC,kind:'drop',r:4.5});
+     b.atk=FR(0.92)*cdm; sfx.hit(); } break;
+   case 'tongueAim': aimed(x,y+18,SP(220),bc(4),0.14,{c:cM}); b.atk=FR(0.72)*cdm; sfx.hit(); break;
    case 'hopBurst': b.vy=-190; b.atk=FR(1.5)*cdm; break;
-   case 'drizzle': b.stream={left:bc(12),every:0.09,cd:1.0,t:0,step:s=>{ const a=Math.PI/2+rnd(-0.7,0.7);
+   case 'drizzle': b.stream={left:bc(18),every:0.072,cd:0.9,t:0,step:s=>{ const a=Math.PI/2+rnd(-0.7,0.7);
      eb(x+rnd(-60,60),b.y,Math.cos(a)*SP(rnd(70,130)),Math.sin(a)*SP(rnd(90,150)),{c:cC,r:rnd(3.5,5.5),kind:'drop'}); }}; break;
    /* ---- ハヤテ：風 ---- */
-   case 'feathers': for(let k=0;k<bc(6);k++) needle(x+rnd(-30,30),y,SP(215)+k*10,{c:cG}); sfx.hit(); b.atk=FR(0.85)*cdm; break;
+   case 'feathers': for(let k=0;k<bc(8);k++) needle(x+rnd(-34,34),y,SP(225)+k*9,{c:cG}); sfx.hit(); b.atk=FR(0.7)*cdm; break;
    case 'fanSweep': { const dir=Math.random()<.5?1:-1;
-     arc(x,y,Math.PI*0.25,Math.PI*0.75,bc(8),SP(130),{c:cG,ax:dir*SP(55)}); b.atk=FR(1.0)*cdm; sfx.hit(); } break;
+     arc(x,y,Math.PI*0.22,Math.PI*0.78,bc(10),SP(142),{c:cG,ax:dir*SP(62)}); b.atk=FR(0.88)*cdm; sfx.hit(); } break;
    case 'gustWall': { const side=Math.random()<.5?-1:1, x0=side<0?-10:W+10;
-     for(let k=0;k<bc(6);k++) eb(x0,60+k*((H*0.6)/5),-side*SP(rnd(120,170)),SP(26),{c:cC,r:5,kind:'gust'});
-     b.atk=FR(1.15)*cdm; sfx.hit(); } break;
-   case 'leafSpiral': b.stream={left:bc(26),every:0.055,cd:1.1,t:0,step:s=>{ s.spin+=0.4;
+     for(let k=0;k<bc(7);k++) eb(x0,56+k*((H*0.66)/6),-side*SP(rnd(132,182)),SP(26),{c:cC,r:5,kind:'gust'});
+     b.atk=FR(1.0)*cdm; sfx.hit(); } break;
+   case 'leafSpiral': b.stream={left:bc(30),every:0.05,cd:0.95,t:0,step:s=>{ s.spin+=0.4;
      for(let a=0;a<2;a++){ const an=s.spin+a*Math.PI; eb(x,y,Math.cos(an)*SP(135),Math.sin(an)*SP(135),{c:cG,turn:1.1}); } }}; break;
    case 'teleport': b.tele=0.5; b.atk=FR(1.3)*cdm; break;
    /* ---- ライデン：雷 ---- */
    case 'pillar': { const n=Math.min(3,1+Math.floor(b.phaseN/1.5));
      const offs=[0,-110,110]; for(let i=0;i<n;i++) beams.push({axis:'v',x:clamp(player.x+offs[i],26,W-26),warn:0.9,on:0.45,w:28,kind:'bolt'});
      b.atk=FR(1.7)*cdm; sfx.warn(); } break;
-   case 'thunderRing': ring(x,y,bc(16),SP(120),b.spin,{c:cY}); ring(x,y,bc(8),SP(165),b.spin+0.2,{c:cC,r:4.5});
-     b.atk=FR(1.2)*cdm; sfx.boom(); shake=reduce?3:7; break;
-   case 'zigzag': { for(let k=0;k<bc(4);k++){ const a=Math.atan2(player.y-y,player.x-x)+rnd(-0.3,0.3);
-     eb(x,y,Math.cos(a)*SP(160),Math.sin(a)*SP(160),{c:cY,kind:'bolt',turn:(k%2?2.6:-2.6),zig:0.14}); }
-     b.atk=FR(0.95)*cdm; sfx.hit(); } break;
-   case 'drumWave': ring(x,y,bc(26),SP(72),b.spin,{c:cR,r:6}); shake=reduce?4:9; b.atk=FR(1.5)*cdm; sfx.boom(); break;
+   case 'thunderRing': ring(x,y,bc(18),SP(132),b.spin,{c:cY}); ring(x,y,bc(10),SP(180),b.spin+0.2,{c:cC,r:4.5});
+     b.atk=FR(1.0)*cdm; sfx.boom(); shake=reduce?3:7; break;
+   case 'zigzag': { for(let k=0;k<bc(5);k++){ const a=Math.atan2(player.y-y,player.x-x)+rnd(-0.32,0.32);
+     eb(x,y,Math.cos(a)*SP(172),Math.sin(a)*SP(172),{c:cY,kind:'bolt',turn:(k%2?1.9:-1.9)}); }
+     b.atk=FR(0.78)*cdm; sfx.hit(); } break;
+   case 'drumWave': ring(x,y,bc(28),SP(84),b.spin,{c:cR,r:6}); ring(x,y,bc(12),SP(120),b.spin+0.15,{c:cY,r:4.5}); shake=reduce?4:9; b.atk=FR(1.3)*cdm; sfx.boom(); break;
    case 'crossBolt': beams.push({axis:'v',x:clamp(player.x,26,W-26),warn:0.95,on:0.45,w:28,kind:'bolt'});
      beams.push({axis:'h',y:clamp(player.y,60,H-30),warn:0.95,on:0.45,w:26,kind:'bolt'});
      ring(x,y,bc(12),SP(115),b.spin,{c:cY}); b.atk=FR(1.9)*cdm; sfx.warn(); break;
@@ -1232,7 +1292,7 @@ function updateBoss(dt){ const b=boss; b.t+=dt; b.spin+=dt*1.4; if(b.flash>0)b.f
   else { b.atk-=dt; if(b.atk<=0)bossFire(b); }
   for(let j=bullets.length-1;j>=0;j--){ const bl=bullets[j]; if(Math.abs(b.x-bl.x)<b.w*0.42&&Math.abs(b.y-bl.y)<b.h*0.42){ bullets.splice(j,1); b.hp--; b.flash=Math.max(b.flash,.05); burst(bl.x,bl.y,'#7fe0ff',2); if(b.hp%14===0)sfx.hit(); } }
   const P=b.def.phases.length, fr=b.hp/b.maxhp; if(b.phaseN<P && fr<=(P-b.phaseN)/P) bossPhase(b,b.phaseN+1);
-  if(invuln<=0 && Math.abs(b.x-player.x)<b.w*0.32 && Math.abs(b.y-player.y)<b.h*0.32) hurt();
+  if(invuln<=0 && Math.abs(b.x-player.x)<b.w*0.38 && Math.abs(b.y-player.y)<b.h*0.38) hurt();
   if(b.hp<=0)bossDown(); }
 function bossDown(){ burst(boss.x,boss.y,'#ffd166',54); flash=.7; shake=reduce?6:22; slow=0.8; hitstop=0.12; sfx.bigboom();
   cancelBullets(); beams.length=0; addScore(3000*(stageIdx+1)); boss=null;
@@ -1320,7 +1380,8 @@ function update(dt){ time+=dt; stageTime+=dt;
   const hitR=1.6, grR=14;
   for(let i=ebullets.length-1;i>=0;i--){ const b=ebullets[i]; b.t+=dt;
     if(b.ax)b.vx+=b.ax*dt; if(b.ay)b.vy+=b.ay*dt;
-    if(b.turn){ const c=Math.cos(b.turn*dt),s=Math.sin(b.turn*dt),vx=b.vx*c-b.vy*s,vy=b.vx*s+b.vy*c; b.vx=vx;b.vy=vy; }
+    if(b.turn){ const c=Math.cos(b.turn*dt),s=Math.sin(b.turn*dt),vx=b.vx*c-b.vy*s,vy=b.vx*s+b.vy*c; b.vx=vx;b.vy=vy;
+      b.turn*=Math.exp(-0.85*dt); if(Math.abs(b.turn)<0.06)b.turn=0; }
     if(b.home&&b.t<1.7){ const a=Math.atan2(player.y-b.y,player.x-b.x),spd=Math.hypot(b.vx,b.vy)||1;
       let cur=Math.atan2(b.vy,b.vx),d=a-cur; while(d>Math.PI)d-=TAU; while(d<-Math.PI)d+=TAU;
       cur+=clamp(d,-b.home*dt,b.home*dt); b.vx=Math.cos(cur)*spd; b.vy=Math.sin(cur)*spd; }
@@ -1367,8 +1428,11 @@ function drawEnv(env){ const cols=ENVG[env]||ENVG.getsu; const g=ctx.createLinea
   const mg=ctx.createRadialGradient(W-86,my,4,W-86,my,mr*2.4); mg.addColorStop(0,'rgba(255,243,196,.55)'); mg.addColorStop(1,'rgba(255,243,196,0)');
   ctx.fillStyle=mg; ctx.fillRect(W-86-mr*3,my-mr*3,mr*6,mr*6);
   ctx.fillStyle='#fff3c4'; ctx.beginPath(); ctx.arc(W-86,my,mr,0,TAU); ctx.fill();
-  ctx.fillStyle='rgba(214,196,150,.5)'; ctx.beginPath(); ctx.arc(W-86-mr*0.3,my-mr*0.2,mr*0.22,0,TAU); ctx.fill();
-  ctx.beginPath(); ctx.arc(W-86+mr*0.25,my+mr*0.3,mr*0.15,0,TAU); ctx.fill(); ctx.restore();
+  ctx.fillStyle='rgba(214,196,150,.5)'; ctx.beginPath(); ctx.arc(W-86-mr*0.42,my-mr*0.12,mr*0.2,0,TAU); ctx.fill();
+  ctx.beginPath(); ctx.arc(W-86-mr*0.2,my+mr*0.34,mr*0.13,0,TAU); ctx.fill();
+  /* 欠け（三日月）：影の円を重ねる */
+  ctx.fillStyle=cols[0]; ctx.beginPath(); ctx.arc(W-86+mr*0.46,my-mr*0.18,mr*0.94,0,TAU); ctx.fill();
+  ctx.restore();
   /* 星層 */
   ctx.fillStyle='rgba(230,238,255,.5)'; for(const s of starsA)ctx.fillRect(s.x,s.y,s.s,s.s);
   ctx.fillStyle='rgba(255,255,255,.85)'; for(const s of starsB)ctx.fillRect(s.x,s.y,s.s,s.s); }
@@ -1416,9 +1480,10 @@ function render(){
   /* player bullets (ofuda) */
   for(const b of bullets)drawSpr('ofuda',b.x,b.y,2,{alpha:0.92});
   /* enemies */
-  for(const e of enemies){ const fl=e.flash>0;
-    drawSpr(e.sprKey,e.x,e.y+ (e.beh==='floater'?Math.sin(e.t*4+e.phase)*2:0), e.scale,
-      {alpha:fl?0.45:1, rot:e.beh==='spinner'?e.spin:0});
+  for(const e of enemies){ const fl=e.flash>0; const sk=SPR[e.spr]?e.spr:'onibi';
+    const sc=e.size/Math.max(SPR[sk].w,SPR[sk].h);
+    drawSpr(sk,e.x,e.y+(e.beh==='floater'?Math.sin(e.t*4+e.phase)*2:0), sc,
+      {alpha:fl?0.45:1, rot:e.beh==='spinner'?e.spin:0, flip:(e.beh==='ambusher'&&e.dir<0)});
     if(fl){ ctx.fillStyle='rgba(255,255,255,.35)'; ctx.beginPath(); ctx.arc(e.x,e.y,e.w*0.5,0,TAU); ctx.fill(); } }
   /* boss */
   if(boss){ const b=boss; const bob=Math.sin(b.t*2)*4;
@@ -1455,9 +1520,11 @@ function render(){
     const blink=invuln>0&&Math.floor(time*14)%2===0;
     if(!blink){ const frame=Math.floor(player.anim*8)%2?'fox1':'fox0';
       drawSpr(frame,player.x,player.y,2.4,{flip:player.roll<-0.25}); }
-    if(isFocus()){ ctx.strokeStyle='rgba(255,243,176,.9)'; ctx.lineWidth=1.2;
+    if(isFocus()){ ctx.strokeStyle='rgba(255,243,176,.55)'; ctx.lineWidth=1;
       ctx.beginPath(); ctx.arc(player.x,player.y,14,0,TAU); ctx.stroke();
-      ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(player.x,player.y,2.2,0,TAU); ctx.fill(); } }
+      /* 当たり判定点（hitR=1.6 の中心） */
+      ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(player.x,player.y,3.4,0,TAU); ctx.fill();
+      ctx.fillStyle='#ff5a49'; ctx.beginPath(); ctx.arc(player.x,player.y,1.8,0,TAU); ctx.fill(); } }
   /* bomb rings */
   for(const r of bombRings){ const p=r.t/0.6; ctx.strokeStyle='rgba(255,243,176,'+(1-p)+')';
     ctx.lineWidth=6*(1-p)+2; ctx.beginPath(); ctx.arc(r.x,r.y,p*W*1.1,0,TAU); ctx.stroke(); }
@@ -1469,6 +1536,11 @@ function render(){
   ctx.font='12px DotGothic16,monospace'; ctx.fillStyle='#fff3b0'; ctx.textAlign='left';
   ctx.fillText('SCORE '+String(score).padStart(7,'0'),8,14);
   ctx.textAlign='right'; ctx.fillText('HI '+String(hiScore).padStart(7,'0'),W-8,14);
+  /* 上段2行目：残機・ボム・パワー（ボス名バーと重ならない位置） */
+  ctx.textAlign='center'; ctx.fillStyle='#ff7ad0';
+  ctx.fillText('♥'.repeat(Math.max(0,Math.min(6,lives))),W/2-56,14);
+  ctx.fillStyle='#ffd166'; ctx.fillText('B'+bombs,W/2+8,14);
+  ctx.fillStyle='#7fe0ff'; ctx.fillText('P'+player.power,W/2+42,14);
   ctx.textAlign='left'; ctx.fillStyle='#ff7ad0';
   ctx.fillText('残機 '+'♥'.repeat(Math.max(0,lives)),8,H-10);
   ctx.fillStyle='#7fe0ff'; ctx.fillText('P'+player.power,110,H-10);
@@ -1504,11 +1576,11 @@ bindTap('retryBtn',quitToTitle); bindTap('nextBtn',quitToTitle);
 bindTap('continueBtn',doContinue); bindTap('cQuitBtn',quitToTitle);
 $('bombBtn').addEventListener('touchstart',e=>{ e.preventDefault(); initAudio(); tryBomb(); },{passive:false});
 $('bombBtn').addEventListener('mousedown',e=>{ e.preventDefault(); tryBomb(); });
+/* SLOWはタップで ON/OFF 切替（押しっぱなし不要） */
 const fb=$('focusBtn');
-fb.addEventListener('touchstart',e=>{ e.preventDefault(); setFocus(true); },{passive:false});
-fb.addEventListener('touchend',e=>{ e.preventDefault(); setFocus(false); },{passive:false});
-fb.addEventListener('mousedown',e=>{ e.preventDefault(); setFocus(true); });
-addEventListener('mouseup',()=>{ if(focusHold)setFocus(false); });
+function toggleFocus(){ setFocus(!focusHold); }
+fb.addEventListener('touchstart',e=>{ e.preventDefault(); toggleFocus(); },{passive:false});
+fb.addEventListener('mousedown',e=>{ e.preventDefault(); toggleFocus(); });
 
 /* ============================================================ MAIN LOOP ============================================================ */
 function frame(now){ requestAnimationFrame(frame);
