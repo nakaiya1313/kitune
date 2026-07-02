@@ -914,9 +914,9 @@ const MUSIC={
    lead:parseLead('C5/1 G5/1 C6/1 Bb5/1 G5/1 Eb5/1 G5/1 C6/1 Bb5/2 G5/1 Ab5/1 G5/2 Eb5/1 C5/1 C6/1 Bb5/1 G5/1 C6/1 Ab5/2 G5/1 F5/1 Eb5/1 F5/1 G5/1 Bb5/1 C6/2 G5/.5 G5/.5 C5/1 Eb5/1 G5/1 Ab5/.5 G5/.5 F5/1 Eb5/1 D5/1 Eb5/1 F5/1 G5/2 r/1 G4/1') },
 };
 /* ============================================================ GAME DEFS ============================================================ */
-const DIFFS={ easy:{label:'EASY',spd:0.85,dens:0.72,fireMul:1.25,hp:0.85,bossHp:0.78},
-              normal:{label:'NORMAL',spd:1.05,dens:1.15,fireMul:0.92,hp:1.0,bossHp:1.05},
-              hard:{label:'HARD',spd:1.32,dens:1.85,fireMul:0.58,hp:1.6,bossHp:1.42} };
+const DIFFS={ easy:{label:'EASY',spd:0.85,dens:0.72,fireMul:1.25,hp:0.85,bossHp:0.78,kasaN:3,kasaSum:2,minN:1},
+              normal:{label:'NORMAL',spd:1.05,dens:1.15,fireMul:0.92,hp:1.0,bossHp:1.05,kasaN:6,kasaSum:3,minN:1},
+              hard:{label:'HARD',spd:1.36,dens:2.0,fireMul:0.55,hp:1.6,bossHp:1.42,kasaN:10,kasaSum:5,minN:2} };
 let DM={spd:1,dens:1,fireMul:1,hp:1}, diffKey='normal';
 const SP=s=>s*DM.spd, CNT=n=>Math.max(3,Math.round(n*DM.dens)), FR=t=>t*DM.fireMul;
 
@@ -932,7 +932,7 @@ function lastStage(){ return STAGES.length-1; }
 /* ---------- 敵図鑑（スプライト + 行動） ---------- */
 const EK={
  onibi     :{spr:'onibi',     size:44, hp:2,  sc:130, sp:46,  beh:'floater', deathfire:'ring6'},
- kasako    :{spr:'kasako',    size:44, hp:2,  sc:140, sp:88,  beh:'weaver'},
+ kasako    :{spr:'kasako',    size:44, hp:2,  sc:150, sp:88,  beh:'weaver', deathfire:'kasa'},
  karasu    :{spr:'karasu',    size:46, hp:2,  sc:150, sp:100, beh:'glider'},
  karasu_d  :{spr:'karasu',    size:46, hp:3,  sc:210, sp:130, beh:'striker'},
  chochin   :{spr:'chochin',   size:48, hp:7,  sc:520, sp:38,  beh:'turret'},
@@ -953,7 +953,7 @@ const EK={
  onibi_r   :{spr:'onibi',     size:44, hp:3,  sc:300, sp:64,  beh:'riser', deathfire:'ring6'},
  shiki_x   :{spr:'shiki',     size:44, hp:3,  sc:360, sp:110, beh:'rusher', deathfire:'scatter'},
  suzu_x    :{spr:'suzu',      size:42, hp:4,  sc:380, sp:46,  beh:'floater', deathfire:'scatter'},
- kasako_a  :{spr:'kasako',    size:44, hp:2,  sc:200, sp:120, beh:'ambusher'},
+ kasako_a  :{spr:'kasako',    size:44, hp:2,  sc:220, sp:120, beh:'ambusher', deathfire:'kasa'},
  karasu_a  :{spr:'karasu',    size:46, hp:3,  sc:230, sp:135, beh:'ambusher'},
  chochin_x :{spr:'chochin',   size:48, hp:7,  sc:600, sp:36,  beh:'turret', deathfire:'aimed3'},
  kumobo_x  :{spr:'kumobo',    size:48, hp:4,  sc:360, sp:78,  beh:'diver',  deathfire:'scatter'},
@@ -1002,6 +1002,7 @@ function onKill(e){ chain++; chainT=2.5; mult=Math.min(8,1+Math.floor(chain/6));
   if(e.deathfire==='ring6')ring(e.x,e.y,6,SP(92),rnd(0,TAU),{c:'#7fe0ff',r:5});
   if(e.deathfire==='ring8')ring(e.x,e.y,8,SP(96),rnd(0,TAU),{c:'#ffd166',r:5});
   if(e.deathfire==='scatter')scatter(e.x,e.y,CNT(9),SP(70),SP(170),{c:'#ff9f43',r:5});
+  if(e.deathfire==='kasa')ring(e.x,e.y,DIFFS[diffKey].kasaN,SP(rnd(105,135)),rnd(0,TAU),{c:'#ff5a49',r:4.5,kind:'drop'});
   if(e.deathfire==='aimed3')aimed(e.x,e.y,SP(175),CNT(3),0.22,{c:'#ff5a49'});
   if(e.drop)dropItem(e.x,e.y,e.drop);
   else if(Math.random()<0.09)dropItem(e.x,e.y,'power');
@@ -1157,7 +1158,7 @@ function updEnemy(e,dt){ e.t+=dt; e.spin+=dt*2.4; if(e.flash>0)e.flash-=dt; if(e
    コハク=分身と狐火、ツクヨミ=満ち欠けの月光弾幕 */
 const BOSSES={
  B_kasa:{ name:'からかさ大化け  オボロ', spr:'bossKasa', scale:1.6, hp:700, accent:'#ff5a49', track:'b1', move:'hop',
-   phases:[ ['spinRain','tongueAim','drizzle'], ['rainWall','spinRain','tongueAim','hopBurst'], ['drizzle','rainWall','hopBurst','spinRain','tongueAim'] ] },
+   phases:[ ['kasaSummon','spinRain','tongueAim','drizzle'], ['rainWall','kasaSummon','spinRain','tongueAim','hopBurst'], ['drizzle','rainWall','kasaSummon','hopBurst','spinRain','tongueAim'] ] },
  B_tengu:{ name:'大天狗  ハヤテ', spr:'bossTengu', scale:1.6, hp:920, accent:'#6fe3a0', track:'b2', move:'dart',
    phases:[ ['feathers','fanSweep','leafSpiral'], ['teleport','feathers','gustWall','fanSweep'], ['teleport','leafSpiral','gustWall','feathers','fanSweep'] ] },
  B_oni:{ name:'雷鬼  ライデン', spr:'bossOni', scale:1.6, hp:1060, accent:'#ffd166', track:'b3', move:'anchor',
@@ -1170,7 +1171,7 @@ const BOSSES={
             ['galaxy','moonbeam','waxwane','crescents'], ['lunarOmni','galaxy','moonbeam','starRain'],
             ['lunarOmni','moonbeam','galaxy','waxwane','crescents','starRain'] ] },
 };
-const MINION=['kasako','karasu','kumobo','onibi','shiki'];
+const MINION=['kasako','onibi','hitodama','onibi_r','shiki_x'];
 function spawnBoss(){ const S=STAGES[stageIdx]; const def=BOSSES[S.boss];
   const hp=Math.round(def.hp*DIFFS[diffKey].bossHp);
   boss={def,name:def.name,accent:def.accent,spr:def.spr,scale:def.scale,
@@ -1190,6 +1191,13 @@ function bossFire(b){ const cdm=Math.max(0.5,1-(b.phaseN-1)*0.12);
    /* ---- オボロ：傘 ---- */
    case 'spinRain': b.stream={left:bc(34),every:0.045,cd:0.95,t:0,step:s=>{ s.spin+=0.34;
      for(let a=0;a<2;a++){ const an=s.spin+a*Math.PI; eb(x,y,Math.cos(an)*SP(152),Math.sin(an)*SP(152),{c:cR}); } }}; break;
+   case 'kasaSummon': { const n=DIFFS[diffKey].kasaSum;
+     const cur=enemies.filter(e=>e.kind&&e.kind.startsWith('kasako')).length;
+     if(cur>=n+2){ b.atk=FR(0.9)*cdm; break; } /* 場に十分いる間は再召喚しない */
+     const add=Math.min(n, n+2-cur);
+     for(let i=0;i<add;i++){ const sx=clamp(b.x+rnd(-130,130),36,W-36);
+       spawnEnemy(i%2?'kasako':'kasako_a',sx,{y:b.y+rnd(6,30)}); }
+     burst(b.x,b.y+18,'#ff5a49',10); b.atk=FR(2.1)*cdm; sfx.warn(); } break;
    case 'rainWall': { const n=bc(10),gap=1+Math.floor(rnd(0,n-2)); wall(b.y+10,n,gap,SP(168),{c:cC,kind:'drop',r:4.5});
      b.atk=FR(0.92)*cdm; sfx.hit(); } break;
    case 'tongueAim': aimed(x,y+18,SP(220),bc(4),0.14,{c:cM}); b.atk=FR(0.72)*cdm; sfx.hit(); break;
@@ -1283,10 +1291,11 @@ function updateBoss(dt){ const b=boss; b.t+=dt; b.spin+=dt*1.4; if(b.flash>0)b.f
       aimed(b.x,b.y+30,SP(170),bc(3),0.2,{c:'#7fe0ff'}); sfx.hit(); }
     if(b.clones.t<=0)b.clones=null; }
   /* 増援 */
-  b.minT-=dt; if(b.minT<=0){ b.minT=Math.max(4.5,7.5-b.phaseN*0.5);
-    const n = diffKey==='hard'?(1+Math.floor(Math.random()*2)):1;
-    if(enemies.length<6){ const mk=MINION[stageIdx]||'onibi';
-      for(let i=0;i<n;i++)spawnEnemy(mk,clamp(b.x+rnd(-60,60),40,W-40),{drop:'power',y:b.y+16});
+  b.minT-=dt; if(b.minT<=0){ b.minT=Math.max(4.0,7.0-b.phaseN*0.5);
+    const n = DIFFS[diffKey].minN;
+    if(enemies.length<8){ const mk=MINION[stageIdx]||'onibi';
+      for(let i=0;i<n;i++){ const o={drop:'power'}; if(EK[mk].beh!=='riser'&&EK[mk].beh!=='ambusher')o.y=b.y+16;
+        spawnEnemy(mk,clamp(b.x+rnd(-60,60),40,W-40),o); }
       burst(b.x,b.y+16,'#ffd166',8); } }
   if(b.stream){ b.stream.t-=dt; let guard=0; while(b.stream.t<=0&&b.stream.left>0&&guard++<60){ b.stream.step(b); b.stream.left--; b.stream.t+=b.stream.every; }
     if(b.stream.left<=0){ b.atk=FR(b.stream.cd)*Math.max(0.5,1-(b.phaseN-1)*0.12); b.stream=null; } }
